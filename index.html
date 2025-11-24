@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Arroz con Chicken!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background-color: #f8f9fa; /* Light background for contrast */
+            padding: 60px 0;
+            text-align: center;
+        }
+        .recipe-card {
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+            transition: transform 0.3s;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">🐔 Arroz King</a>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="display-4">The Best Arroz con Pollo in Town!</h1>
+            <p class="lead">Authentic flavor. Modern twists. Simply delicious.</p>
+            <a href="#recipe-options" class="btn btn-primary btn-lg mt-3">See Our Options</a>
+        </div>
+    </header>
+
+    <section class="container my-5" id="recipe-options">
+        <h2 class="text-center mb-4">✨ Our Recipe Variations</h2>
+        <div class="row" id="recipe-cards-container">
+            <p class="text-center text-muted" id="loading-message">Loading delicious options...</p>
+        </div>
+    </section>
+
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="text-center p-3">
+            © 2024 Arroz King | Powered by GitHub Pages
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+
+    <script>
+        // *** IMPORTANT: Replace this with the RAW URL of your YAML file on GitHub Pages ***
+        const YAML_URL = 'YOUR_GITHUB_YAML_URL'; 
+
+        const container = document.getElementById('recipe-cards-container');
+        const loadingMessage = document.getElementById('loading-message');
+
+        /**
+         * Generates the HTML string for a single recipe card.
+         * @param {object} recipe - The recipe object from the YAML data.
+         * @returns {string} The HTML string for the card.
+         */
+        function createRecipeCard(recipe) {
+            return `
+                <div class="col-md-4 mb-4">
+                    <div class="card recipe-card h-100">
+                        <img src="${recipe.image_url}" class="card-img-top" alt="${recipe.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${recipe.name}</h5>
+                            <p class="card-text">${recipe.description}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Base:</strong> ${recipe.base_rice}</li>
+                            <li class="list-group-item"><strong>Spices:</strong> ${recipe.key_spices}</li>
+                        </ul>
+                        <div class="card-footer text-center">
+                            <span class="fs-4 text-primary">${recipe.price}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Fetches, parses, and renders the recipe data.
+         */
+        async function loadRecipes() {
+            try {
+                // Fetch the YAML content as plain text
+                const response = await fetch(YAML_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const yamlText = await response.text();
+
+                // Parse the YAML text into a JavaScript object
+                const data = jsyaml.load(yamlText);
+                
+                // Clear the loading message
+                loadingMessage.remove();
+
+                // Generate and inject the HTML for all recipes
+                if (data && data.recipes && Array.isArray(data.recipes)) {
+                    const cardsHtml = data.recipes.map(createRecipeCard).join('');
+                    container.innerHTML = cardsHtml;
+                } else {
+                    container.innerHTML = '<p class="text-center text-danger">Error: Recipe data not found or invalid format in YAML.</p>';
+                }
+
+            } catch (error) {
+                console.error('Failed to load and render recipes:', error);
+                loadingMessage.textContent = 'Error: Could not load recipe options. Check the YAML URL.';
+                loadingMessage.classList.add('text-danger');
+            }
+        }
+
+        // Run the main function when the page loads
+        loadRecipes();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+recipes:
+  - name: "Classic Arroz con Pollo"
+    description: "The traditional, savory family recipe with a rich tomato-saffron base."
+    base_rice: "Valencia Rice"
+    key_spices: "Achiote, Saffron, Cumin"
+    price: "$14.99"
+    image_url: "https://example.com/images/classic.jpg" # Replace with a real image URL
+  
+  - name: "Peruvian Green Rice (Arroz con Pollo Verde)"
+    description: "A vibrant green rice cooked with cilantro and spinach for a fresh, herbaceous flavor."
+    base_rice: "Jasmine Rice"
+    key_spices: "Cilantro, Huacatay, Beer"
+    price: "$15.99"
+    image_url: "https://example.com/images/verde.jpg" # Replace with a real image URL
+
+  - name: "Spicy Ghost Kitchen Special"
+    description: "Our signature high-heat recipe featuring smoked paprika and a spicy aji amarillo paste."
+    base_rice: "Calasparra Rice"
+    key_spices: "Smoked Paprika, Aji Amarillo, Oregano"
+    price: "$16.49"
+    image_url: "https://example.com/images/spicy.jpg" # Replace with a real image URL
